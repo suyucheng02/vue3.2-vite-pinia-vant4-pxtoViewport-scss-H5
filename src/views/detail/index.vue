@@ -1,11 +1,10 @@
-<!-- 首页 -->
+<!-- 详情页 -->
 <script lang='ts' setup>
-
-
+const onClickLeft = () => history.back();
 </script>
 
 <template>
-    <div>这里是首页</div>
+    <div>详情页</div>
 </template>
 
 <style lang='scss' scoped></style>

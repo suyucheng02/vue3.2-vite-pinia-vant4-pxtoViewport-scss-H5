@@ -19,7 +19,7 @@ declare global {
   }
 
   // vue
-  declare type PropType<T> = VuePropType<T>
+  declare type PropsType<T> = VuePropType<T>
 
   declare type Recordable<T = any> = Record<string, T>
   declare type ReadonlyRecordable<T = any> = {

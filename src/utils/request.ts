@@ -1,37 +1,21 @@
 /**
  * @description [ axios 请求封装]
  */
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios'
-// import { Message, Modal } from 'view-design' // UI组件库
-import { showDialog as Dialog, showToast as Toast } from 'vant'
-// 根据环境不同引入不同api地址
+import axios from 'axios'
+import type { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import { showDialog, showToast } from 'vant'
 import { config } from '@/config'
 
 const service = axios.create({
   baseURL: config.baseApi, // url = base url + request url
   timeout: 5000,
-  withCredentials: false // send cookies when cross-domain requests
-  // headers: {
-  // 	// clear cors
-  // 	'Cache-Control': 'no-cache',
-  // 	Pragma: 'no-cache'
-  // }
+  headers: {}
 })
 
 // Request interceptors
 service.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
-    // 加载动画
-    if (config.loading) {
-      Toast.loading({
-        message: '加载中...',
-        forbidClick: true
-      })
-    }
-    // 在此处添加请求头等，如添加 token
-    // if (store.state.token) {
-    // config.headers['Authorization'] = `Bearer ${store.state.token}`
-    // }
+  (config: InternalAxiosRequestConfig) => {
+    console.log('config:', config)
     return config
   },
   (error: any) => {
@@ -42,8 +26,6 @@ service.interceptors.request.use(
 // Response interceptors
 service.interceptors.response.use(
   async (response: AxiosResponse) => {
-    // await new Promise(resovle => setTimeout(resovle, 3000))
-    Toast.clear()
     const res = response.data
     if (res.code !== 0) {
       // token 过期
@@ -52,10 +34,6 @@ service.interceptors.response.use(
         return
       }
       if (res.code == 403) {
-        Dialog.alert({
-          title: '警告',
-          message: res.msg
-        })
         return
       }
       // 若后台返回错误值，此处返回对应错误对象，下面 error 就会接收
@@ -66,7 +44,6 @@ service.interceptors.response.use(
     }
   },
   (error: any) => {
-    Toast.clear()
     if (error && error.response) {
       switch (error.response.status) {
         case 400:
@@ -114,7 +91,7 @@ service.interceptors.response.use(
       }
       error.message = '连接到服务器失败，请联系管理员'
     }
-    Toast(error.message)
+    showToast(error.message)
     // store.auth.clearAuth()
     // store.dispatch('clearAuth')
     return Promise.reject(error)

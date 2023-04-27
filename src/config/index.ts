@@ -8,16 +8,15 @@ export interface IConfig {
   APPSECRET?: string // 公众号appScript 一般放在服务器端
   $cdn: string // cdn公共资源路径
 }
-const envMap = {}
-const globalModules = import.meta.globEager('./*.ts')
+
+const envMap: any = {}
+const globalModules = import.meta.glob('./*.ts', { eager: true })
 Object.entries(globalModules).forEach(([key, value]) => {
   // key.match(/\.\/env\.(\S*)\.ts/)
   const name = key.replace(/\.\/env\.(.*)\.ts$/, '$1')
   envMap[name] = value
 })
 
-console.log('envMap:', envMap)
-
 // 根据环境引入不同配置
 export const config = envMap[import.meta.env.VITE_ENV].default
-// console.log('根据环境引入不同配置', config)
+console.log('根据环境引入不同配置', config)

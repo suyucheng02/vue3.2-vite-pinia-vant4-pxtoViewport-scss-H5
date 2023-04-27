@@ -1,15 +1,16 @@
 import type { RouteRecordRaw } from 'vue-router'
 import Layout from '@/layout/index.vue'
+import tabBar from '@/layout/tabBar.vue'
 
 export const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    redirect: '/home',
-    name: 'layout',
-    component: Layout,
+    redirect: '/',
+    name: 'tabBar',
+    component: tabBar,
     children: [
       {
-        path: '/home',
+        path: '/',
         name: 'Home',
         component: () => import('@/views/home/index.vue'),
         meta: { title: '首页', keepAlive: false }
@@ -19,6 +20,19 @@ export const routes: Array<RouteRecordRaw> = [
         name: 'user',
         component: () => import('@/views/user/index.vue'),
         meta: { title: '我的', keepAlive: false }
+      }
+    ]
+  },
+  {
+    path: '/',
+    name: 'Layout',
+    component: Layout,
+    children: [
+      {
+        path: '/detail',
+        name: 'detail',
+        component: () => import('@/views/detail/index.vue'),
+        meta: { title: '详情页', keepAlive: false }
       }
     ]
   }
